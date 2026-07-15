@@ -1,22 +1,48 @@
-![alt text](image.png)# PR Response Doc – CineLog Watchlist Feature
+# PR Response Doc — CineLog Watchlist Feature
 
 ## AI Usage
 
-(To fill out at the end.)
+I used AI to help me understand the existing codebase, troubleshoot Git and rebase issues, and explain why some tests were failing. I wrote the code changes myself after reviewing the existing project patterns. I also used AI to double-check my commit messages followed the conventional commit format.
+
+---
 
 ## Comment 1 – Rename
 
-(To fill out.)
+**What I did:**
+
+I renamed `save_to_watchlist()` to `add_to_watchlist()` in `services/watchlist_service.py` and updated every place where it was called, including the watchlist route.
+
+**How I verified:**
+
+I searched the project for the old function name to make sure there were no remaining references, then ran the test suite.
+
+---
 
 ## Comment 2 – Deduplication
 
-(To fill out.)
+**What I did:**
 
-## Comment 3 – Missing test
+I added a duplicate check before creating a new watchlist entry. If the film is already in the user's watchlist, the service raises `AlreadyInWatchlistError` instead of creating another entry.
 
-(To fill out.)
+**How I verified:**
 
-## Comment 4 – Default visibility
+I compared the implementation to the existing collection service pattern and confirmed the behavior by running the tests.
+
+---
+
+## Comment 3 – Missing Test
+
+**What I did:**
+
+I created `tests/test_watchlist.py` and added a test to verify that adding a nonexistent film raises `FilmNotFoundError`.
+
+**How I verified:**
+
+I ran the new watchlist test by itself and then ran the complete test suite to confirm everything still passed.
+
+---
+
+## Comment 4 – Default Visibility
 
 **My position:**
 
@@ -24,26 +50,40 @@ I decided to keep `public=True` as the default.
 
 **Reasoning:**
 
-I think a public default makes the most sense for CineLog because the app is meant to be social. If someone is adding movies to a watchlist, it's probably because they want to keep track of what they're planning to watch, and sharing that with other users fits the purpose of the app. It also saves users from having to change the setting every single time they add a movie if they're okay with sharing it.
+I think most users adding a film to a watchlist expect it to behave like a normal watchlist without having to change extra settings every time. It keeps the common case simple while still allowing the value to be changed later if needed.
 
 **Tradeoff acknowledged:**
 
-I do understand why someone might prefer a private default. Some users may not want other people seeing their watchlist right away. The downside of using `public=True` is that those users would have to change the visibility themselves. Even so, I think a public default fits the overall goal of CineLog better, as long as users can easily change the setting whenever they want.
+This means some users might accidentally create a public watchlist entry if they don't realize the default. Using `public=False` would prioritize privacy, but it would also require more manual changes for users who normally want public watchlists.
 
-## Comment 5 – Sort order
+---
+
+## Comment 5 – Sort Order
 
 **My position:**
 
-I agree that the watchlist should be sorted by the date the movies were added, with the newest ones first.
+I chose to sort by the date the film was added, with the newest entries first.
 
 **Reasoning:**
 
-At first, the watchlist was sorted alphabetically, which makes it easy to find a specific movie by title. However, I think sorting by date added is more useful for how someone would normally use a watchlist. Users will probably want to see the movies they recently became interested in instead of searching through the whole list alphabetically.
+When I add something to a watchlist, I usually want to see the movies I recently saved first. It makes it easier to continue where I left off instead of searching through older entries.
 
 **Engagement with the reviewer's point:**
 
-The reviewer mentioned that most users would want to see what they added recently, and I agree with that reasoning. Alphabetical order is still useful, but it would make more sense as an optional sorting choice later instead of the default.
+I understand that alphabetical order makes movies easier to find, especially in very large watchlists. However, for a personal watchlist, I think showing the newest additions first is more useful for day-to-day use.
+
+---
 
 ## Comment 6 – Rebase
 
-## PR Description
+**What conflicted:**
+
+During the rebase, `.gitignore` conflicted because both branches added one. I also had to restore the `WatchlistEntry` model after rebasing onto the updated `main` branch.
+
+**How I resolved it:**
+
+I merged the `.gitignore` changes and updated the watchlist model so it matched the UUID-based film IDs used in the updated project.
+
+**How I verified no conflict remains:**
+
+I ran the full test suite after the rebase and confirmed all tests passed successfully.
