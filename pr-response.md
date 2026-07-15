@@ -87,3 +87,6 @@ I merged the `.gitignore` changes and updated the watchlist model so it matched 
 **How I verified no conflict remains:**
 
 I ran the full test suite after the rebase and confirmed all tests passed successfully.
+
+
+![Terminal window showing git log --oneline output. The primary subject is a PowerShell terminal displaying a compact commit history for the CineLog project, with the current branch HEAD on feature/watchlist and several recent commits. Visible transcribed lines include: bea7d83 (HEAD -> feature/watchlist, origin/feature/watchlist) docs: complete PR response documentation; 47c2fb3 fix: restore watchlist model with UUID film IDs; 928a1a2 docs: add PR response documentation; ca7fea5 test: add nonexistent film test for watchlist; a989e4e fix: add deduplication and update watchlist behavior; 99a1c89 chore: add gitignore for local files; 30e7569 fix: update film retrieval method to use db.session.get in collection and watchlist services; a881f4d feat: add watchlist model and endpoints; bbe206c (upstream/main, upstream/HEAD, origin/main, main) Merge pull request #2 from ascherj/chore/add-gitignore. The terminal prompt at the top shows (.venv) PS C:\Users\yilin\Downloads\CodePath\ai201-project6-cinelog-starter>. The environment is a developer workstation showing a git history; the tone is factual and technical, focused on project changes.](image.png)
